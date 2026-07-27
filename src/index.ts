@@ -1,15 +1,20 @@
 
-import {PrismaClient} from "@prisma/client"
+import { PrismaClient } from "./generated/prisma/client.js"
+import { PrismaPg } from "@prisma/adapter-pg"
 import express from "express"
 const app=express()
 
 
 
-const prismaClient=new PrismaClient();
+const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL,
+})
+
+const prismaClient=new PrismaClient({ adapter });
 
 
 app.get("/", async (req,res)=>{
- const data=   await prismaClient.user.findmany();
+ const data=   await prismaClient.user.findMany();
        
     res.json({
         data
